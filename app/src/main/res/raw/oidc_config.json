@@ -1,0 +1,6 @@
+{
+  "client_id": "be4aVtj4ocsoWBbSwHuJ_JJ4jsAa",
+  "redirect_uri": "wso2sample://oauth2",
+  "authorization_scope": "openid",
+  "discovery_uri": "https://10.0.2.2:9443/oauth2/oidcdiscovery/.well-known/openid-configuration"
+}
