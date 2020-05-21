@@ -26,7 +26,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import com.example.sample.R;
 import org.oidc.agent.sso.LoginService;
 
 import java.util.concurrent.atomic.AtomicReference;
