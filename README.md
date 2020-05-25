@@ -11,7 +11,7 @@
     | --------------------- | ------------- | 
     | Service Provider Name | sample-app  |
     | Description           | This is a mobile application  | 
-    | Call Back Url         | wso2sample://oauth  | 
+    | Call Back Url         | wso2sample://oauth2  | 
 
 2. Enable following properties:
 - PKCE Mandatory
@@ -23,9 +23,12 @@
 
 ### Build the SDK locally
 
-1. Clone this project: https://github.com/piraveena/android-sdk.git
+1. Clone this project: https://github.com/piraveena/identity-sdks-android.git
+2. Checkout to [sdk branch](https://github.com/piraveena/identity-sdks-android/tree/sdk) 
+    - `git checkout sdk`
 
-2. Build the library in your local maven. Run the following commands. Now the library will be available in your local .m2 cache. 
+3. Build the library in your local maven. Run the following commands. Now the library will be
+ available in your local .m2 cache. 
     - `./gradlew clean assembleRelease`
     - `./gradlew publishToMavenLocal `
 
@@ -41,7 +44,7 @@ Add the relevant configs.
 ```json
 {
  "client_id": {client-id},
- "redirect_uri": "wso2sample://oauth",
+ "redirect_uri": "wso2sample://oauth2",
  "authorization_scope": "openid",
  "discovery_uri": "https://{HOST_NAME}:{PORT}/oauth2/oidcdiscovery/.well-known/openid-configuration"
 }
