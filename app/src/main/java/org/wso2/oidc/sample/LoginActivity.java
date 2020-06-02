@@ -19,7 +19,6 @@
 package org.wso2.oidc.sample;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.browser.customtabs.CustomTabsIntent;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -28,13 +27,9 @@ import android.os.Bundle;
 
 import org.oidc.agent.sso.LoginService;
 
-import java.util.concurrent.atomic.AtomicReference;
-
 public class LoginActivity extends AppCompatActivity {
 
-    public static final String LOG_TAG = "AppAuthSample";
     LoginService mLoginService;
-    private final AtomicReference<CustomTabsIntent> customTabIntent = new AtomicReference<>();
 
 
     @Override

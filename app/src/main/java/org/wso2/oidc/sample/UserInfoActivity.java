@@ -44,7 +44,6 @@ public class UserInfoActivity extends AppCompatActivity {
     private String mIdToken;
     private OAuth2TokenResponse mOAuth2TokenResponse;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -60,6 +59,11 @@ public class UserInfoActivity extends AppCompatActivity {
         handleAuthorizationResponse(getIntent());
     }
 
+    /**
+     * Handles the authorization response.
+     *
+     * @param intent Intent.
+     */
     private void handleAuthorizationResponse(Intent intent) {
 
         mLoginService.handleAuthorization(intent, new TokenRequest.TokenRespCallback() {
@@ -71,7 +75,10 @@ public class UserInfoActivity extends AppCompatActivity {
         });
     }
 
-    private void getUserInfo(){
+    /**
+     * Calls userinfo endpoint.
+     */
+    private void getUserInfo() {
         mLoginService.getUserInfo(new UserInfoRequest.UserInfoResponseCallback() {
             @Override
             public void onUserInfoRequestCompleted(UserInfoResponse userInfoResponse) {
@@ -81,7 +88,7 @@ public class UserInfoActivity extends AppCompatActivity {
                 mIdToken = mOAuth2TokenResponse.idToken;
                 mAccessToken = mOAuth2TokenResponse.accessToken;
                 JSONObject userInfoProperties = userInfoResponse.getUserInfoProperties();
-                Log.i(LOG_TAG, userInfoProperties.toString());
+                Log.d(LOG_TAG, userInfoProperties.toString());
                 Log.d(LOG_TAG, String.format("Token Response [ Access Token: %s, ID Token: %s ]",
                         mOAuth2TokenResponse.accessToken, mOAuth2TokenResponse.idToken));
                 getUIContent();
@@ -89,30 +96,27 @@ public class UserInfoActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Add UI content.
+     */
     private void getUIContent() {
 
-        try {
-            //JSONParser parser = new JSONParser();
-            //String[] split = mIdToken.split("\\.");
-            //String decodeIDToken = new String(Base64.decode(split[1], Base64.URL_SAFE), "UTF-8");
-           // JSONObject json = (JSONObject) parser.parse(decodeIDToken);
-            addUiElements();
-            findViewById(R.id.logout).setOnClickListener(v ->
-                    singleLogout(this)
-            );
-        } catch (Exception e) {
-            //handle the exception.
-        }
+        addUiElements();
+        findViewById(R.id.logout).setOnClickListener(v -> singleLogout(this));
     }
 
-
+    /**
+     * Handles logout for the application.
+     *
+     * @param context Context.
+     */
     private void singleLogout(Context context) {
 
         mLoginService.logout(context);
         finish();
     }
 
-    private void addUiElements(){
+    private void addUiElements() {
 
         TextView username = findViewById(R.id.username);
         TextView emailId = findViewById(R.id.emailid);
