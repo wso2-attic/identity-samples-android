@@ -64,11 +64,12 @@ public class LoginActivity extends AppCompatActivity {
         Intent cancelIntent = new Intent(context, LoginActivity.class);
         cancelIntent.putExtra("failed", true);
         cancelIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingCompletionIntent = PendingIntent.getActivity(context, 0,
+        PendingIntent successIntent = PendingIntent.getActivity(context, 0,
                 completionIntent, 0);
-        PendingIntent pendingCancelIntent = PendingIntent.getActivity(context, 0, cancelIntent, 0);
+        PendingIntent failureIntent = PendingIntent.getActivity(context, 0,
+                cancelIntent, 0);
 
-        mLoginService.doAuthorization(pendingCompletionIntent, pendingCancelIntent);
+        mLoginService.authorize(successIntent, failureIntent);
 
     }
 }
