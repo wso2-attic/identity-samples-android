@@ -20,7 +20,6 @@ package org.wso2.oidc.sample;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.TextView;
@@ -29,7 +28,6 @@ import org.json.JSONObject;
 
 import org.oidc.agent.exception.ServerException;
 import org.oidc.agent.sso.LoginService;
-import org.oidc.agent.sso.OAuth2TokenResponse;
 import org.oidc.agent.sso.UserInfoRequest;
 import org.oidc.agent.sso.UserInfoResponse;
 
@@ -63,23 +61,26 @@ public class UserInfoActivity extends AppCompatActivity {
      */
     private void getUserInfo() {
 
-        mLoginService.getUserInfo(new UserInfoRequest.UserInfoResponseCallback() {
-            @Override
-            public void onUserInfoRequestCompleted(UserInfoResponse userInfoResponse,
-                    ServerException e) {
+        mLoginService.getUserInfo((userInfoResponse, e) -> {
+            if (userInfoResponse != null) {
                 mSubject = userInfoResponse.getSubject();
                 mEmail = userInfoResponse.getUserInfoProperty("email");
-                Log.i(LOG_TAG, mSubject);
-                mIdToken = mLoginService.getTokenResponse().getIdToken();
-                mAccessToken = mLoginService.getTokenResponse().getAccessToken();
                 JSONObject userInfoProperties = userInfoResponse.getUserInfoProperties();
                 Log.d(LOG_TAG, userInfoProperties.toString());
-                Log.d(LOG_TAG, String.format("Token Response [ Access Token: %s, ID Token: %s ]",
-                        mLoginService.getTokenResponse().getAccessToken(),
-                        mLoginService.getTokenResponse().getIdToken()));
-                runOnUiThread(() -> getUIContent());
-
+                Log.i(LOG_TAG, mSubject);
             }
+
+            if (mLoginService.getTokenResponse() != null) {
+                mIdToken = mLoginService.getTokenResponse().getIdToken();
+                mAccessToken = mLoginService.getTokenResponse().getAccessToken();
+                Log.d(LOG_TAG,
+                        String.format("Token Response [ Access Token: %s, ID Token: %s ]",
+                                mLoginService.getTokenResponse().getAccessToken(),
+                                mLoginService.getTokenResponse().getIdToken()));
+            }
+
+            Log.i(LOG_TAG, String.valueOf(mLoginService.isUserLoggedIn()));
+            runOnUiThread(() -> getUIContent());
         });
     }
 
@@ -89,24 +90,18 @@ public class UserInfoActivity extends AppCompatActivity {
     private void getUIContent() {
 
         addUiElements();
-        findViewById(R.id.logout).setOnClickListener(v -> Logout(this));
+        findViewById(R.id.logout).setOnClickListener(v -> Logout());
     }
 
     /**
      * Handles logout for the application.
-     *
-     * @param context Context.
      */
-    private void Logout(Context context) {
+    private void Logout() {
 
-        mLoginService.getUserInfo(this::test);
-        mLoginService.logout(context);
+        mLoginService.logout();
         finish();
     }
 
-    private void test(UserInfoResponse userInfoResponse, ServerException e) {
-        Log.i(LOG_TAG, "Test");
-    }
 
     private void addUiElements() {
 
