@@ -26,6 +26,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import org.oidc.agent.sso.DefaultLoginService;
 import org.oidc.agent.sso.LoginService;
 
 public class LoginActivity extends AppCompatActivity {
@@ -38,12 +39,13 @@ public class LoginActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mLoginService = LoginService.getInstance(this);
+        mLoginService = DefaultLoginService.getInstance(this);
         findViewById(R.id.login).setOnClickListener(v -> doAuthorization(this));
     }
 
     @Override
     protected void onDestroy() {
+
         if (mLoginService != null) {
             mLoginService.dispose();
         }

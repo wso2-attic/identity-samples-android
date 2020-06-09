@@ -26,10 +26,9 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
-import org.oidc.agent.exception.ServerException;
+import org.oidc.agent.sso.DefaultLoginService;
 import org.oidc.agent.sso.LoginService;
-import org.oidc.agent.sso.UserInfoRequest;
-import org.oidc.agent.sso.UserInfoResponse;
+
 
 public class UserInfoActivity extends AppCompatActivity {
 
@@ -45,7 +44,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
-        mLoginService = LoginService.getInstance(this);
+        mLoginService = DefaultLoginService.getInstance(this);
 
     }
 
