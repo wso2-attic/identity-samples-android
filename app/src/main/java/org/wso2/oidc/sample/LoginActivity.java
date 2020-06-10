@@ -25,9 +25,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
-import org.oidc.agent.context.AuthenticationContext;
-import org.oidc.agent.sso.DefaultLoginService;
-import org.oidc.agent.sso.LoginService;
+import org.wso2.identity.sdk.android.oidc.sso.DefaultLoginService;
+import org.wso2.identity.sdk.android.oidc.sso.LoginService;
 
 public class LoginActivity extends AppCompatActivity {
 
