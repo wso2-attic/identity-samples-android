@@ -26,12 +26,12 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
-import org.oidc.agent.context.AuthenticationContext;
-import org.oidc.agent.exception.ServerException;
-import org.oidc.agent.handler.UserInfoRequestHandler;
-import org.oidc.agent.model.UserInfoResponse;
-import org.oidc.agent.sso.DefaultLoginService;
-import org.oidc.agent.sso.LoginService;
+import org.wso2.identity.sdk.android.oidc.context.AuthenticationContext;
+import org.wso2.identity.sdk.android.oidc.exception.ServerException;
+import org.wso2.identity.sdk.android.oidc.handler.UserInfoRequestHandler;
+import org.wso2.identity.sdk.android.oidc.model.UserInfoResponse;
+import org.wso2.identity.sdk.android.oidc.sso.DefaultLoginService;
+import org.wso2.identity.sdk.android.oidc.sso.LoginService;
 
 
 public class UserInfoActivity extends AppCompatActivity {
@@ -51,8 +51,6 @@ public class UserInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_info);
         mLoginService = new DefaultLoginService(this);
         mAuthenticationContext = (AuthenticationContext) getIntent().getSerializableExtra("context");
-
-
     }
 
     @Override
