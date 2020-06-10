@@ -18,7 +18,6 @@
 
 package org.wso2.oidc.sample;
 
-import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.PendingIntent;
@@ -26,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import org.oidc.agent.context.AuthenticationContext;
 import org.oidc.agent.sso.DefaultLoginService;
 import org.oidc.agent.sso.LoginService;
 
@@ -39,17 +39,7 @@ public class LoginActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mLoginService = DefaultLoginService.getInstance(this);
         findViewById(R.id.login).setOnClickListener(v -> doAuthorization(this));
-    }
-
-    @Override
-    protected void onDestroy() {
-
-        if (mLoginService != null) {
-            mLoginService.dispose();
-        }
-        super.onDestroy();
     }
 
     /**
@@ -61,21 +51,14 @@ public class LoginActivity extends AppCompatActivity {
      */
     private void doAuthorization(Context context) {
 
-        if (!mLoginService.isUserLoggedIn()) {
-            Intent completionIntent = new Intent(context, UserInfoActivity.class);
-            Intent cancelIntent = new Intent(context, LoginActivity.class);
-            cancelIntent.putExtra("failed", true);
-            cancelIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            PendingIntent successIntent = PendingIntent
-                    .getActivity(context, 0, completionIntent, 0);
-            PendingIntent failureIntent = PendingIntent.getActivity(context, 0, cancelIntent, 0);
+        mLoginService = new DefaultLoginService(this);
+        Intent completionIntent = new Intent(context, UserInfoActivity.class);
+        Intent cancelIntent = new Intent(context, LoginActivity.class);
+        cancelIntent.putExtra("failed", true);
+        cancelIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent successIntent = PendingIntent.getActivity(context, 0, completionIntent, 0);
+        PendingIntent failureIntent = PendingIntent.getActivity(context, 0, cancelIntent, 0);
 
-            mLoginService.authorize(successIntent, failureIntent);
-        } else {
-            Log.d(LOG_TAG, "The User is already logged in");
-            Intent intent = new Intent(LoginActivity.this, UserInfoActivity.class);
-            startActivity(intent);
-            finish();
-        }
+        mLoginService.authorize(successIntent, failureIntent);
     }
 }

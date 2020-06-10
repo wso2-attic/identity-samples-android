@@ -26,6 +26,10 @@ import android.widget.TextView;
 
 import org.json.JSONObject;
 
+import org.oidc.agent.context.AuthenticationContext;
+import org.oidc.agent.exception.ServerException;
+import org.oidc.agent.handler.UserInfoRequestHandler;
+import org.oidc.agent.model.UserInfoResponse;
 import org.oidc.agent.sso.DefaultLoginService;
 import org.oidc.agent.sso.LoginService;
 
@@ -38,13 +42,16 @@ public class UserInfoActivity extends AppCompatActivity {
     private String mEmail;
     private String mAccessToken;
     private String mIdToken;
+    AuthenticationContext mAuthenticationContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
-        mLoginService = DefaultLoginService.getInstance(this);
+        mLoginService = new DefaultLoginService(this);
+        mAuthenticationContext = (AuthenticationContext) getIntent().getSerializableExtra("context");
+
 
     }
 
@@ -60,26 +67,27 @@ public class UserInfoActivity extends AppCompatActivity {
      */
     private void getUserInfo() {
 
-        mLoginService.getUserInfo((userInfoResponse, e) -> {
-            if (userInfoResponse != null) {
-                mSubject = userInfoResponse.getSubject();
-                mEmail = userInfoResponse.getUserInfoProperty("email");
-                JSONObject userInfoProperties = userInfoResponse.getUserInfoProperties();
-                Log.d(LOG_TAG, userInfoProperties.toString());
-                Log.i(LOG_TAG, mSubject);
-            }
+        mLoginService.getUserInfo(mAuthenticationContext, new UserInfoRequestHandler.UserInfoResponseCallback() {
+            @Override
+            public void onUserInfoRequestCompleted(UserInfoResponse userInfoResponse,
+                    ServerException e) {
+                if (userInfoResponse != null) {
+                    mSubject = userInfoResponse.getSubject();
+                    mEmail = userInfoResponse.getUserInfoProperty("email");
+                    JSONObject userInfoProperties = userInfoResponse.getUserInfoProperties();
+                    Log.d(LOG_TAG, userInfoProperties.toString());
+                    Log.i(LOG_TAG, mSubject);
+                }
 
-            if (mLoginService.getTokenResponse() != null) {
-                mIdToken = mLoginService.getTokenResponse().getIdToken();
-                mAccessToken = mLoginService.getTokenResponse().getAccessToken();
-                Log.d(LOG_TAG,
-                        String.format("Token Response [ Access Token: %s, ID Token: %s ]",
-                                mLoginService.getTokenResponse().getAccessToken(),
-                                mLoginService.getTokenResponse().getIdToken()));
+                if (mAuthenticationContext.getOAuth2TokenResponse() != null) {
+                    mIdToken = mAuthenticationContext.getOAuth2TokenResponse().getIdToken();
+                    mAccessToken = mAuthenticationContext.getOAuth2TokenResponse().getAccessToken();
+                    Log.d(LOG_TAG,
+                            String.format("Token Response [ Access Token: %s, ID Token: %s ]",
+                                    mIdToken, mAccessToken));
+                }
+                runOnUiThread(() -> getUIContent());
             }
-
-            Log.i(LOG_TAG, String.valueOf(mLoginService.isUserLoggedIn()));
-            runOnUiThread(() -> getUIContent());
         });
     }
 
@@ -97,7 +105,7 @@ public class UserInfoActivity extends AppCompatActivity {
      */
     private void Logout() {
 
-        mLoginService.logout();
+        mLoginService.logout(this, mAuthenticationContext);
         finish();
     }
 
