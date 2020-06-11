@@ -25,6 +25,7 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import org.wso2.identity.sdk.android.oidc.context.AuthenticationContext;
@@ -34,6 +35,7 @@ import org.wso2.identity.sdk.android.oidc.model.UserInfoResponse;
 import org.wso2.identity.sdk.android.oidc.sso.DefaultLoginService;
 import org.wso2.identity.sdk.android.oidc.sso.LoginService;
 
+import java.util.Iterator;
 
 public class UserInfoActivity extends AppCompatActivity {
 
@@ -52,7 +54,8 @@ public class UserInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_info);
         mLoginService = new DefaultLoginService(this);
-        mAuthenticationContext = (AuthenticationContext) getIntent().getSerializableExtra("context");
+        mAuthenticationContext = (AuthenticationContext) getIntent()
+                .getSerializableExtra("context");
     }
 
     @Override
@@ -67,28 +70,41 @@ public class UserInfoActivity extends AppCompatActivity {
      */
     private void getUserInfo() {
 
-        mLoginService.getUserInfo(mAuthenticationContext, new UserInfoRequestHandler.UserInfoResponseCallback() {
-            @Override
-            public void onUserInfoRequestCompleted(UserInfoResponse userInfoResponse,
-                    ServerException e) {
-                if (userInfoResponse != null) {
-                    mSubject = userInfoResponse.getSubject();
-                    mEmail = userInfoResponse.getUserInfoProperty("email");
-                    JSONObject userInfoProperties = userInfoResponse.getUserInfoProperties();
-                    Log.d(LOG_TAG, userInfoProperties.toString());
-                    Log.i(LOG_TAG, mSubject);
-                }
+        mLoginService.getUserInfo(mAuthenticationContext,
+                new UserInfoRequestHandler.UserInfoResponseCallback() {
+                    @Override
+                    public void onUserInfoRequestCompleted(UserInfoResponse userInfoResponse,
+                            ServerException e) {
+                        if (userInfoResponse != null) {
+                            mSubject = userInfoResponse.getSubject();
+                            mEmail = userInfoResponse.getUserInfoProperty("email");
+                            JSONObject userInfoProperties = userInfoResponse
+                                    .getUserInfoProperties();
+                            Iterator<String> keys = userInfoProperties.keys();
 
-                if (mAuthenticationContext.getOAuth2TokenResponse() != null) {
-                    mIdToken = mAuthenticationContext.getOAuth2TokenResponse().getIdToken();
-                    mAccessToken = mAuthenticationContext.getOAuth2TokenResponse().getAccessToken();
-                    Log.d(LOG_TAG,
-                            String.format("Token Response [ Access Token: %s, ID Token: %s ]",
-                                    mIdToken, mAccessToken));
-                }
-                runOnUiThread(() -> getUIContent());
-            }
-        });
+                            // Loops through all userinfo claims
+                            try {
+                                while (keys.hasNext()) {
+                                    String claimName = keys.next();
+                                    String claimValue = (String) userInfoProperties.get(claimName);
+                                    Log.d(LOG_TAG, claimName + " : " + claimValue);
+                                }
+                            } catch (JSONException exception) {
+                                Log.e(LOG_TAG, "Error while getting userclaims", exception );
+                            }
+                        }
+
+                        if (mAuthenticationContext.getOAuth2TokenResponse() != null) {
+                            mIdToken = mAuthenticationContext.getOAuth2TokenResponse().getIdToken();
+                            mAccessToken = mAuthenticationContext.getOAuth2TokenResponse()
+                                    .getAccessToken();
+                            Log.d(LOG_TAG, String.format(
+                                    "Token Response [ Access Token: %s, ID Token: %s ]", mIdToken,
+                                    mAccessToken));
+                        }
+                        runOnUiThread(() -> getUIContent());
+                    }
+                });
     }
 
     /**
@@ -104,7 +120,7 @@ public class UserInfoActivity extends AppCompatActivity {
         Button testButton = (Button) findViewById(R.id.show_text);
         TextView idtoken = findViewById(R.id.idtoken);
 
-        if(tokenShown) {
+        if (tokenShown) {
             tokenShown = false;
             idtoken.setText(mIdToken.substring(0, 100) + " ...");
             testButton.setText(R.string.showbtn);
@@ -124,7 +140,6 @@ public class UserInfoActivity extends AppCompatActivity {
         finish();
     }
 
-
     private void addUiElements() {
 
         TextView username = findViewById(R.id.username);
@@ -133,8 +148,8 @@ public class UserInfoActivity extends AppCompatActivity {
         TextView idtokenView = findViewById(R.id.idtoken);
 
         idtokenView.setText(mIdToken.substring(0, 100) + " ...");
-        username.setText("Hey ".concat(mSubject.substring(0, 1).toUpperCase()
-                + mSubject.substring(1) + ","));
+        username.setText("Hey ".concat(
+                mSubject.substring(0, 1).toUpperCase() + mSubject.substring(1) + ","));
         emailId.setText(mEmail);
         accessTokenView.setText(mAccessToken);
     }

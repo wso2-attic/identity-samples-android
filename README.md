@@ -1,5 +1,3 @@
-# wso2is-android-sample-app
-
 # Run this Android Sample App 
 
 
@@ -23,9 +21,8 @@
 
 ### Build the SDK locally
 
-1. Clone this project: https://github.com/piraveena/identity-sdks-android.git
-2. Checkout to [sdk branch](https://github.com/piraveena/identity-sdks-android/tree/sdk) 
-    - `git checkout sdk`
+1. Clone this project: https://github.com/wso2-extensions/identity-sdks-android.git
+    `git clone https://github.com/wso2-extensions/identity-sdks-android.git`
 
 3. Build the library in your local maven. Run the following commands. Now the library will be
  available in your local .m2 cache. 
@@ -37,9 +34,10 @@
 #### Configuration
 
 
-Add the relevant configs. 
-    - Add the client-id of the application.
-    - Update the {HOST_NAME}:{PORT} with the IS server's hostname and port respectively
+Add the relevant configs in oidc_config.json file located in `res/raw` folder. 
+
+- Add the client-id of the application.
+- Update the {HOST_NAME}:{PORT} with the IS server's hostname and port respectively
 
 ```json
 {
@@ -97,7 +95,9 @@ Example:
 ## Running in an Android Device
 1. Enable USB Debugging in the Developer Options in the Android Device. Refer documentation on [Run you App](https://developer.android.com/training/basics/firstapp/running-app).
 
-2. If the WSO2 IS is hosted in the local machine, change the domain of the endpoints in the “app/res/raw/config.json” file and the hostnames specified under “HostName” and “MgtHostName” tags in the “<IS_HOME>/repository/conf/carbon.xml” file to the IP Address of local machine. Make sure that both the Android Device and the local machine is connected to the same WIFI network.
+2. If the WSO2 IS is hosted in the local machine, change the domain of the endpoints in the “app
+/res/raw/oidc_config.json” file and the hostnames specified under “HostName” and “MgtHostName” tags
+ in the “<IS_HOME>/repository/conf/carbon.xml” file to the IP Address of local machine. Make sure that both the Android Device and the local machine is connected to the same WIFI network.
 
 3. Connect the Android Device to the machine through a USB cable.
 

@@ -21,7 +21,6 @@ package org.wso2.oidc.sample;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -30,15 +29,12 @@ import org.wso2.identity.sdk.android.oidc.sso.LoginService;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private LoginService mLoginService;
-    private static final String LOG_TAG = "LoginActivity";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        findViewById(R.id.login).setOnClickListener(v -> doAuthorization(this));
+        findViewById(R.id.login).setOnClickListener(v -> doAuthorization());
     }
 
     /**
@@ -46,17 +42,16 @@ public class LoginActivity extends AppCompatActivity {
      * parameters and sent it to the IDP. If the authorization request is successful,
      * UserInfoActivity will handle it.
      *
-     * @param context Context.
      */
-    private void doAuthorization(Context context) {
+    private void doAuthorization() {
 
-        mLoginService = new DefaultLoginService(this);
-        Intent completionIntent = new Intent(context, UserInfoActivity.class);
-        Intent cancelIntent = new Intent(context, LoginActivity.class);
+        LoginService mLoginService = new DefaultLoginService(this);
+        Intent completionIntent = new Intent(this, UserInfoActivity.class);
+        Intent cancelIntent = new Intent(this, LoginActivity.class);
         cancelIntent.putExtra("failed", true);
         cancelIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent successIntent = PendingIntent.getActivity(context, 0, completionIntent, 0);
-        PendingIntent failureIntent = PendingIntent.getActivity(context, 0, cancelIntent, 0);
+        PendingIntent successIntent = PendingIntent.getActivity(this, 0, completionIntent, 0);
+        PendingIntent failureIntent = PendingIntent.getActivity(this, 0, cancelIntent, 0);
 
         mLoginService.authorize(successIntent, failureIntent);
     }
