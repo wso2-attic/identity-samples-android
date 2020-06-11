@@ -22,6 +22,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONObject;
@@ -38,6 +39,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
     private LoginService mLoginService;
     private static final String LOG_TAG = "UserInfoActivity";
+    private static boolean tokenShown = false;
     private String mSubject;
     private String mEmail;
     private String mAccessToken;
@@ -51,8 +53,6 @@ public class UserInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_info);
         mLoginService = new DefaultLoginService(this);
         mAuthenticationContext = (AuthenticationContext) getIntent().getSerializableExtra("context");
-
-
     }
 
     @Override
@@ -95,9 +95,24 @@ public class UserInfoActivity extends AppCompatActivity {
      * Add UI content.
      */
     private void getUIContent() {
-
         addUiElements();
         findViewById(R.id.logout).setOnClickListener(v -> Logout());
+        findViewById(R.id.show_text).setOnClickListener(v -> showText());
+    }
+
+    private void showText() {
+        Button testButton = (Button) findViewById(R.id.show_text);
+        TextView idtoken = findViewById(R.id.idtoken);
+
+        if(tokenShown) {
+            tokenShown = false;
+            idtoken.setText(mIdToken.substring(0, 100) + " ...");
+            testButton.setText(R.string.showbtn);
+        } else {
+            tokenShown = true;
+            idtoken.setText(mIdToken);
+            testButton.setText(R.string.hidebtn);
+        }
     }
 
     /**
@@ -117,8 +132,9 @@ public class UserInfoActivity extends AppCompatActivity {
         TextView accessTokenView = findViewById(R.id.accesstoken);
         TextView idtokenView = findViewById(R.id.idtoken);
 
-        idtokenView.setText(mIdToken);
-        username.setText(mSubject);
+        idtokenView.setText(mIdToken.substring(0, 100) + " ...");
+        username.setText("Hey ".concat(mSubject.substring(0, 1).toUpperCase()
+                + mSubject.substring(1) + ","));
         emailId.setText(mEmail);
         accessTokenView.setText(mAccessToken);
     }
