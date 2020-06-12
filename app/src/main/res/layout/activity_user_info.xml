@@ -116,14 +116,34 @@
                 android:contentDescription="avatar" />
 
             <TextView
-                android:id="@+id/emailview"
+                android:id="@+id/userView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="60sp"
-                android:text="@string/email"
+                android:layout_marginTop="15sp"
+                android:text="@string/user_name"
                 android:textColor="@color/black"
                 android:textSize="14sp"
                 android:layout_below="@id/userAvatar"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/userView"
+                android:textColor="@color/light_black"
+                android:textSize="14sp">
+            </TextView>
+
+            <TextView
+                android:id="@+id/emailview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"
+                android:text="@string/email"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:layout_below="@id/name"
                 android:textStyle="bold"/>
 
             <TextView
