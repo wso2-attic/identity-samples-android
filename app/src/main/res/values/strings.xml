@@ -37,4 +37,9 @@
     <string name="user_name">Name</string>
     <string name="welcome">Welcome</string>
     <string name="todo">TODO</string>
+    <string name="scope">Scope</string>
+    <string name="redirect_uri">redirect_uri</string>
+    <string name="discovery_url">Discovery URL</string>
+    <string name="clientid">ClientID</string>
+    <string name="configuration">Configuration</string>
 </resources>

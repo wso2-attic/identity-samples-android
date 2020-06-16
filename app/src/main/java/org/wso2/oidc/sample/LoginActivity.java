@@ -53,6 +53,6 @@ public class LoginActivity extends AppCompatActivity {
         PendingIntent successIntent = PendingIntent.getActivity(this, 0, completionIntent, 0);
         PendingIntent failureIntent = PendingIntent.getActivity(this, 0, cancelIntent, 0);
 
-        mLoginService.authorize(successIntent, failureIntent);
+        mLoginService.authorize(successIntent, failureIntent, true);
     }
 }
