@@ -44,6 +44,7 @@ public class UserInfoActivity extends AppCompatActivity {
     private static boolean tokenShown = false;
     private String mSubject;
     private String mEmail;
+    private String mName;
     private String mAccessToken;
     private String mIdToken;
     AuthenticationContext mAuthenticationContext;
@@ -78,6 +79,7 @@ public class UserInfoActivity extends AppCompatActivity {
                         if (userInfoResponse != null) {
                             mSubject = userInfoResponse.getSubject();
                             mEmail = userInfoResponse.getUserInfoProperty("email");
+                            mName = userInfoResponse.getUserInfoProperty("given_name");
                             JSONObject userInfoProperties = userInfoResponse
                                     .getUserInfoProperties();
                             Iterator<String> keys = userInfoProperties.keys();
@@ -88,6 +90,7 @@ public class UserInfoActivity extends AppCompatActivity {
                                     String claimName = keys.next();
                                     String claimValue = (String) userInfoProperties.get(claimName);
                                     Log.d(LOG_TAG, claimName + " : " + claimValue);
+
                                 }
                             } catch (JSONException exception) {
                                 Log.e(LOG_TAG, "Error while getting userclaims", exception );
@@ -146,8 +149,10 @@ public class UserInfoActivity extends AppCompatActivity {
         TextView emailId = findViewById(R.id.emailid);
         TextView accessTokenView = findViewById(R.id.accesstoken);
         TextView idtokenView = findViewById(R.id.idtoken);
+        TextView name = findViewById(R.id.name);
 
         idtokenView.setText(mIdToken.substring(0, 100) + " ...");
+        name.setText(mName);
         username.setText("Hey ".concat(
                 mSubject.substring(0, 1).toUpperCase() + mSubject.substring(1) + ","));
         emailId.setText(mEmail);

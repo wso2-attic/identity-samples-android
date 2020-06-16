@@ -34,6 +34,7 @@
     <string name="accesstoken">AccessToken</string>
     <string name="greeting_one">You have successfully logged in.</string>
     <string name="greeting_two">Here are your login details</string>
+    <string name="user_name">Name</string>
     <string name="welcome">Welcome</string>
     <string name="todo">TODO</string>
 </resources>
