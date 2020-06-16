@@ -26,11 +26,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import org.wso2.identity.sdk.android.oidc.context.AuthenticationContext;
-import org.wso2.identity.sdk.android.oidc.exception.ServerException;
-import org.wso2.identity.sdk.android.oidc.handler.UserInfoRequestHandler;
+import org.wso2.identity.sdk.android.oidc.model.OAuth2TokenResponse;
 import org.wso2.identity.sdk.android.oidc.model.UserInfoResponse;
 import org.wso2.identity.sdk.android.oidc.sso.DefaultLoginService;
 import org.wso2.identity.sdk.android.oidc.sso.LoginService;
@@ -47,7 +45,8 @@ public class UserInfoActivity extends AppCompatActivity {
     private String mName;
     private String mAccessToken;
     private String mIdToken;
-    AuthenticationContext mAuthenticationContext;
+    private AuthenticationContext mAuthenticationContext;
+    private static final String AUTHENTICATION_CONTEXT = "context";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,58 +55,71 @@ public class UserInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_user_info);
         mLoginService = new DefaultLoginService(this);
         mAuthenticationContext = (AuthenticationContext) getIntent()
-                .getSerializableExtra("context");
+                .getSerializableExtra(AUTHENTICATION_CONTEXT);
     }
 
     @Override
     protected void onStart() {
 
         super.onStart();
-        getUserInfo();
+        getTokenResponse();
+        getUserInfoClaims();
+        getUIContent();
     }
 
     /**
-     * Calls userinfo endpoint.
+     * Method to get OAuth2TokenResponse object from AuthenticationContext.
      */
-    private void getUserInfo() {
+    private void getTokenResponse() {
 
-        mLoginService.getUserInfo(mAuthenticationContext,
-                new UserInfoRequestHandler.UserInfoResponseCallback() {
-                    @Override
-                    public void onUserInfoRequestCompleted(UserInfoResponse userInfoResponse,
-                            ServerException e) {
-                        if (userInfoResponse != null) {
-                            mSubject = userInfoResponse.getSubject();
-                            mEmail = userInfoResponse.getUserInfoProperty("email");
-                            mName = userInfoResponse.getUserInfoProperty("given_name");
-                            JSONObject userInfoProperties = userInfoResponse
-                                    .getUserInfoProperties();
-                            Iterator<String> keys = userInfoProperties.keys();
+        // Get OAuth2TokenResponse object from authentication context.
+        OAuth2TokenResponse oAuth2TokenResponse = mAuthenticationContext.getOAuth2TokenResponse();
+        if (oAuth2TokenResponse != null) {
+            mIdToken = oAuth2TokenResponse.getIdToken();
+            mAccessToken = oAuth2TokenResponse.getAccessToken();
+            Log.d(LOG_TAG,
+                    String.format("Token Response [ Access Token: %s, ID Token: %s ]", mIdToken,
+                            mAccessToken));
+        }
+    }
 
-                            // Loops through all userinfo claims
-                            try {
-                                while (keys.hasNext()) {
-                                    String claimName = keys.next();
-                                    String claimValue = (String) userInfoProperties.get(claimName);
-                                    Log.d(LOG_TAG, claimName + " : " + claimValue);
+    /**
+     * Method to get claims from IDToken from AuthenticationContext.
+     */
+    private void getIDTokenClaims() {
 
-                                }
-                            } catch (JSONException exception) {
-                                Log.e(LOG_TAG, "Error while getting userclaims", exception );
-                            }
-                        }
+        OAuth2TokenResponse.IDTokenResponse idTokenResponse = mAuthenticationContext
+                .getOAuth2TokenResponse().getIdTokenResponse();
+        if (idTokenResponse != null) {
+            // Get issuer claim from IDToken.
+            String iss = idTokenResponse.getIssuer();
+            Log.d(LOG_TAG, "IDToken issuer: " + iss);
+        }
+    }
 
-                        if (mAuthenticationContext.getOAuth2TokenResponse() != null) {
-                            mIdToken = mAuthenticationContext.getOAuth2TokenResponse().getIdToken();
-                            mAccessToken = mAuthenticationContext.getOAuth2TokenResponse()
-                                    .getAccessToken();
-                            Log.d(LOG_TAG, String.format(
-                                    "Token Response [ Access Token: %s, ID Token: %s ]", mIdToken,
-                                    mAccessToken));
-                        }
-                        runOnUiThread(() -> getUIContent());
-                    }
-                });
+    /**
+     * Get Claims from UserInfoResponse object from AuthenticationContext.
+     */
+    private void getUserInfoClaims() {
+
+        UserInfoResponse userInfoResponse = mAuthenticationContext.getUserInfoResponse();
+        if (userInfoResponse != null) {
+            mSubject = userInfoResponse.getSubject();
+            mEmail = userInfoResponse.getUserInfoProperty("email");
+            mName = userInfoResponse.getUserInfoProperty("given_name");
+            Iterator<String> keys = userInfoResponse.getUserInfoProperties().keys();
+            try {
+                while (keys.hasNext()) {
+                    String claimName = keys.next();
+                    String claimValue = (String) userInfoResponse.getUserInfoProperties()
+                            .get(claimName);
+                    Log.d(LOG_TAG, claimName + " : " + claimValue);
+                }
+            } catch (JSONException exception) {
+                Log.e(LOG_TAG, "Error while getting user claims", exception);
+            }
+
+        }
     }
 
     /**
@@ -120,16 +132,16 @@ public class UserInfoActivity extends AppCompatActivity {
     }
 
     private void showText() {
-        Button testButton = (Button) findViewById(R.id.show_text);
-        TextView idtoken = findViewById(R.id.idtoken);
+        Button testButton = findViewById(R.id.show_text);
+        TextView idTokenView = findViewById(R.id.idtoken);
 
         if (tokenShown) {
             tokenShown = false;
-            idtoken.setText(mIdToken.substring(0, 100) + " ...");
+            idTokenView.setText(mIdToken.substring(0, 100) + " ...");
             testButton.setText(R.string.showbtn);
         } else {
             tokenShown = true;
-            idtoken.setText(mIdToken);
+            idTokenView.setText(mIdToken);
             testButton.setText(R.string.hidebtn);
         }
     }
@@ -145,17 +157,17 @@ public class UserInfoActivity extends AppCompatActivity {
 
     private void addUiElements() {
 
-        TextView username = findViewById(R.id.username);
-        TextView emailId = findViewById(R.id.emailid);
+        TextView usernameView = findViewById(R.id.username);
+        TextView emailIdView = findViewById(R.id.emailid);
         TextView accessTokenView = findViewById(R.id.accesstoken);
-        TextView idtokenView = findViewById(R.id.idtoken);
         TextView name = findViewById(R.id.name);
+        TextView idTokenView = findViewById(R.id.idtoken);
 
-        idtokenView.setText(mIdToken.substring(0, 100) + " ...");
+        idTokenView.setText(mIdToken.substring(0, 100) + " ...");
         name.setText(mName);
-        username.setText("Hey ".concat(
+        usernameView.setText("Hey ".concat(
                 mSubject.substring(0, 1).toUpperCase() + mSubject.substring(1) + ","));
-        emailId.setText(mEmail);
+        emailIdView.setText(mEmail);
         accessTokenView.setText(mAccessToken);
     }
 }
