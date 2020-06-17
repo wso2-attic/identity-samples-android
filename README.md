@@ -1,6 +1,5 @@
 # Run this Android Sample App 
 
-
 ## Register Application
 
 1. Register an application with the following callback-url.
@@ -29,7 +28,7 @@
     - `./gradlew clean assembleRelease`
     - `./gradlew publishToMavenLocal `
 
-##Configure the project
+## Configure the sample
 
 #### Configuration
 
@@ -93,11 +92,13 @@ Example:
 6. Select the Virtual Device and test the application. 
 
 ## Running in an Android Device
-1. Enable USB Debugging in the Developer Options in the Android Device. Refer documentation on [Run you App](https://developer.android.com/training/basics/firstapp/running-app).
+1. Enable USB Debugging in the Developer Options in the Android Device. Refer documentation on
+ [Run your App](https://developer.android.com/training/basics/firstapp/running-app).
 
-2. If the WSO2 IS is hosted in the local machine, change the domain of the endpoints in the “app
-/res/raw/oidc_config.json” file and the hostnames specified under “HostName” and “MgtHostName” tags
- in the “<IS_HOME>/repository/conf/carbon.xml” file to the IP Address of local machine. Make sure that both the Android Device and the local machine is connected to the same WIFI network.
+2. If the WSO2 IS is hosted in the local machine, change the domain of the endpoints in the `app
+/res/raw/oidc_config.json` file and the hostnames specified under `hostname` config
+in the `<IS_HOME>/repository/conf/deployment.toml` file to the IP Address of local machine. 
+Make sure that both the Android Device and the local machine is connected to the same WIFI network.
 
 3. Connect the Android Device to the machine through a USB cable.
 
