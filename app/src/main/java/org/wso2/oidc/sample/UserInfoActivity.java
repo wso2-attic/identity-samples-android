@@ -165,8 +165,10 @@ public class UserInfoActivity extends AppCompatActivity {
 
         idTokenView.setText(mIdToken.substring(0, 100) + " ...");
         name.setText(mName);
-        usernameView.setText("Hey ".concat(
-                mSubject.substring(0, 1).toUpperCase() + mSubject.substring(1) + ","));
+        if (mSubject != null) {
+            usernameView.setText("Hey ".concat(
+                    mSubject.substring(0, 1).toUpperCase() + mSubject.substring(1) + ","));
+        }
         emailIdView.setText(mEmail);
         accessTokenView.setText(mAccessToken);
     }

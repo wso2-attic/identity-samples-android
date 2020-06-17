@@ -25,7 +25,6 @@
     <string name="logout">Logout</string>
     <string name="username1">User Name</string>
     <string name="email">Email Address</string>
-    <string name="logoutb">Logout</string>
     <string name="login_with_wso2_is">Login with WSO2 Identity Server</string>
     <string name="login">Login</string>
     <string name="idtoken">ID Token</string>
@@ -37,9 +36,4 @@
     <string name="user_name">Name</string>
     <string name="welcome">Welcome</string>
     <string name="todo">TODO</string>
-    <string name="scope">Scope</string>
-    <string name="redirect_uri">redirect_uri</string>
-    <string name="discovery_url">Discovery URL</string>
-    <string name="clientid">ClientID</string>
-    <string name="configuration">Configuration</string>
 </resources>
