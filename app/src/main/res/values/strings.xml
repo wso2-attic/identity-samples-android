@@ -18,7 +18,7 @@
 
 <resources>
     <string name="app_name">WSO2 Sample</string>
-    <string name="splash_title">Android Authentication Application</string>
+    <string name="splash_title">Android Authentication Sample</string>
     <string name="username">UserName</string>
     <string name="email_address">Email Address</string>
     <string name="user_profile">User Profile</string>
@@ -28,8 +28,8 @@
     <string name="login_with_wso2_is">Login with WSO2 Identity Server</string>
     <string name="login">Login</string>
     <string name="idtoken">ID Token</string>
-    <string name="showbtn">View Access Token</string>
-    <string name="hidebtn">Hide Access Token</string>
+    <string name="showbtn">View Token Details</string>
+    <string name="hidebtn">Hide Token Details</string>
     <string name="accesstoken">AccessToken</string>
     <string name="greeting_one">You have successfully logged in.</string>
     <string name="greeting_two">Here are your login details</string>
