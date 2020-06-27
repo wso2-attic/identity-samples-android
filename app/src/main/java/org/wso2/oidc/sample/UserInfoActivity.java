@@ -53,8 +53,7 @@ public class UserInfoActivity extends AppCompatActivity {
     private LoginService mLoginService;
     private static final String LOG_TAG = "UserInfoActivity";
     private static boolean tokenShown = false;
-    private String mSubject;
-    private String mEmail;
+    private static boolean userShown = false;
     private String mName;
     private String mAccessToken;
     private String mIdToken;
@@ -104,7 +103,58 @@ public class UserInfoActivity extends AppCompatActivity {
         getTokenResponse();
         getIDTokenClaims();
         getUserInfoClaims();
+        getUser();
         getUIContent();
+    }
+
+    private void getUser(){
+
+        mName = mAuthenticationContext.getUser().getUserName();
+        Map<String, Object> attr= mAuthenticationContext.getUser().getAttributes();
+
+        LinearLayout linearLayout = (LinearLayout) findViewById(R.id.user_details);
+
+        for (Map.Entry<String, Object> claimEntry : attr.entrySet()) {
+            Log.i(LOG_TAG, claimEntry.getKey() + " : " + claimEntry.getValue());
+
+            RelativeLayout.LayoutParams keyParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+            TextView claimKey = new TextView(this);
+            claimKey.setText(claimEntry.getKey());
+            claimKey.setTextSize(14);
+            claimKey.setGravity(Gravity.LEFT);
+            claimKey.setTypeface(null, Typeface.BOLD);
+            claimKey.setLayoutParams(keyParams);
+            linearLayout.addView(claimKey);
+
+            RelativeLayout.LayoutParams valueParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT,
+                    RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+            valueParams.setMargins(0, 0, 0, 20);
+            TextView claimValue = new TextView(this);
+            claimValue.setText(claimEntry.getValue().toString());
+            claimValue.setTextSize(14);
+            claimValue.setGravity(Gravity.LEFT);
+            claimValue.setTypeface(null, Typeface.NORMAL);
+            claimValue.setLayoutParams(valueParams);
+            linearLayout.addView(claimValue);
+        }
+
+    }
+
+    private void showUserText() {
+        Button userButton = findViewById(R.id.show_user_details);
+        LinearLayout userView = findViewById(R.id.user_details);
+
+        if (userShown) {
+            userShown = false;
+            userView.setVisibility(View.GONE);
+            userButton.setText(R.string.showuserbtn);
+        } else {
+            userShown = true;
+            userView.setVisibility(View.VISIBLE);
+            userButton.setText(R.string.hideuserbtn);
+        }
     }
 
     /**
@@ -195,9 +245,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
         UserInfoResponse userInfoResponse = mAuthenticationContext.getUserInfoResponse();
         if (userInfoResponse != null) {
-            mSubject = userInfoResponse.getSubject();
-            mEmail = userInfoResponse.getUserInfoProperty("email");
-            mName = userInfoResponse.getUserInfoProperty("given_name");
+            String subject = userInfoResponse.getSubject();
             Iterator<String> keys = userInfoResponse.getUserInfoProperties().keys();
             try {
                 while (keys.hasNext()) {
@@ -223,6 +271,8 @@ public class UserInfoActivity extends AppCompatActivity {
         findViewById(R.id.show_access_token_details).setOnClickListener(v -> showAccessTokenText());
         findViewById(R.id.id_copy).setOnClickListener(v -> copyIdToken());
         findViewById((R.id.access_copy)).setOnClickListener(v -> copyAccessToken());
+        findViewById(R.id.show_user_details).setOnClickListener(v -> showUserText());
+
     }
 
     private void copyIdToken() {
@@ -283,7 +333,6 @@ public class UserInfoActivity extends AppCompatActivity {
     private void addUiElements() {
 
         TextView usernameView = findViewById(R.id.username);
-        TextView emailIdView = findViewById(R.id.emailid);
         TextView name = findViewById(R.id.name);
         TextView idTokenView = findViewById(R.id.idtoken);
 
@@ -294,11 +343,10 @@ public class UserInfoActivity extends AppCompatActivity {
 
         idTokenView.setText(mIdToken);
         name.setText(mName);
-        if (mSubject != null) {
+        if (mName != null) {
             usernameView.setText("Hey ".concat(
-                    mSubject.substring(0, 1).toUpperCase() + mSubject.substring(1) + ","));
+                    mName.substring(0, 1).toUpperCase() + mName.substring(1) + ","));
         }
-        emailIdView.setText(mEmail);
 
         accessTokenView.setText(mAccessToken);
         accessTokenType.setText(tokenType);
