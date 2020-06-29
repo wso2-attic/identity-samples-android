@@ -80,99 +80,100 @@
             app:layout_constraintVertical_bias="0.075">
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/personal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:cardElevation="0dp"
-                app:cardBackgroundColor="#FFF"
-                app:contentPadding="10sp"
-                android:layout_margin="5sp"
-                app:cardCornerRadius="4dp">
+                    android:id="@+id/personal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5sp"
+                    app:cardBackgroundColor="#FFF"
+                    app:cardCornerRadius="4dp"
+                    app:cardElevation="0dp"
+                    app:contentPadding="10sp">
 
                 <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <TextView
-                        android:id="@+id/username"
                         android:layout_width="match_parent"
-                        android:layout_height="20sp"
-                        android:layout_alignParentStart="true"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                        android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/greeting"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/username"
-                        android:layout_alignParentStart="true"
-                        android:singleLine="true"
-                        android:text="@string/greeting_one"
-                        android:textColor="@color/black"
-                        android:textSize="18sp"
-                        android:textStyle="bold" />
+                            android:id="@+id/greeting"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/username"
+                            android:layout_alignParentStart="true"
+                            android:singleLine="true"
+                            android:text="@string/greeting_one"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/greeting_soft"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/greeting"
-                        android:layout_alignParentStart="true"
-                        android:singleLine="true"
-                        android:text="@string/greeting_two"
-                        android:textColor="@color/black"
-                        android:textSize="12sp"
-                        android:textStyle="normal" />
+                            android:id="@+id/greeting_soft"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/greeting"
+                            android:layout_alignParentStart="true"
+                            android:singleLine="true"
+                            android:text="@string/greeting_two"
+                            android:textColor="@color/black"
+                            android:textSize="12sp"
+                            android:textStyle="normal" />
 
                     <ImageView
-                        android:id="@+id/userAvatar"
-                        android:layout_width="50sp"
-                        android:layout_height="50sp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_marginTop="10sp"
-                        android:contentDescription="avatar"
-                        android:gravity="end"
-                        app:srcCompat="@drawable/user" />
+                            android:id="@+id/userAvatar"
+                            android:layout_width="50sp"
+                            android:layout_height="50sp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="10sp"
+                            android:contentDescription="avatar"
+                            android:gravity="end"
+                            app:srcCompat="@drawable/user" />
 
                     <TextView
-                        android:id="@+id/userView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/userAvatar"
-                        android:layout_marginTop="15sp"
-                        android:text="@string/user_name"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                            android:id="@+id/userView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/userAvatar"
+                            android:layout_marginTop="15sp"
+                            android:text="@string/user_name"
+                            android:textColor="@color/black"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/userView"
-                        android:textColor="@color/light_black"
-                        android:textSize="14sp" />
+                            android:id="@+id/name"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/userView"
+                            android:textColor="@color/light_black"
+                            android:textSize="14sp" />
 
                     <TextView
-                        android:id="@+id/emailview"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/name"
-                        android:layout_marginTop="20sp"
-                        android:text="@string/email"
-                        android:textColor="@color/black"
-                        android:textSize="14sp"
-                        android:textStyle="bold" />
+                            android:id="@+id/username"
+                            android:layout_width="match_parent"
+                            android:layout_height="20sp"
+                            android:layout_alignParentStart="true"
+                            android:textColor="@color/black"
+                            android:textSize="18sp"
+                            android:textStyle="bold" />
 
-                    <TextView
-                        android:id="@+id/emailid"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@id/emailview"
-                        android:textColor="@color/light_black"
-                        android:textSize="14sp" />
+                    <LinearLayout
+                            android:id="@+id/user_details"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/name"
+                            android:layout_marginBottom="20sp"
+                            android:orientation="vertical"
+                            android:visibility="gone" />
+
+                    <Button
+                            android:id="@+id/show_user_details"
+                            android:layout_width="wrap_content"
+                            android:layout_height="29dp"
+                            android:layout_below="@id/user_details"
+                            android:background="@drawable/subdtle_btn"
+                            android:text="@string/showuserbtn"
+                            android:textAllCaps="false"
+                            android:textColor="@color/colorPrimary"
+                            android:textStyle="normal" />
 
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
