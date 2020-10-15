@@ -1,3 +1,6 @@
+# DEPRECATION NOTICE
+This repository is deprecated and all the work has been moved to https://github.com/asgardio/asgardio-android-oidc-sdk.
+
 # Run this Android Sample App 
 
 ## Register Application
